@@ -1,11 +1,30 @@
 use anchor_lang::prelude::*;
 use crate::state::UserAcc;
-use crate::state::BorrowedToken;
-use crate::constants::USER_SEED;
+use crate::state::{BorrowedToken, LendedToken};
+use crate::error::BLErrorCode;
+use crate::constants::{USER_SEED, BORROW_PERCENTAGE, TOKEN_PRICE};
 
 pub fn borrow(ctx: Context<Borrow>, borrow: BorrowedToken) -> Result<()> 
 {
     let user = &mut ctx.accounts.user;
+
+    //Get amount of the total lended tokens in USD
+    let mut total_lended_amount_in_usd = 0;
+    for n in &user.lended_tokens
+    {
+        total_lended_amount_in_usd += n.amount * TOKEN_PRICE; //Get the real token price from Pyth
+    }
+
+    //Get amount of the total borrowed tokens in USD
+    let mut total_borrow_amount_in_usd = 0;
+    for n in &user.borrowed_tokens
+    {
+        total_lended_amount_in_usd += n.amount * TOKEN_PRICE; //Get the real token price from Pyth
+    }
+
+    total_borrow_amount_in_usd += borrow.amount * TOKEN_PRICE; //Add current borrow amount
+
+    require!(total_borrow_amount_in_usd <= (total_lended_amount_in_usd / 100) * BORROW_PERCENTAGE, BLErrorCode::BorrowHigherThanLend);
 
     user.borrowed_tokens.push(borrow);
 
@@ -22,7 +41,7 @@ pub struct Borrow<'info>
         mut,
         seeds=[USER_SEED, signer.key().as_ref()],
         bump,
-        realloc = 8 + UserAcc::LEN + ((user.lended_tokens.len() + 1) * BorrowedToken::LEN),
+        realloc = 8 + UserAcc::LEN + ((user.borrowed_tokens.len() + 1) * BorrowedToken::LEN) + ((user.lended_tokens.len() + 1) * LendedToken::LEN),
         realloc::payer = signer,
         realloc::zero = true)
     ]

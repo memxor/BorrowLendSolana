@@ -27,38 +27,42 @@ describe("borrow_lend", () =>
 
   it("Lend", async () =>
   {
-    const tx = await program.methods.lendMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(10)}).rpc();
-    console.log("Your transaction signature", tx);
+    const tx1 = await program.methods.lendMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(10)}).rpc();
+    console.log("Your transaction signature", tx1);
+    const tx2 = await program.methods.lendMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(5)}).rpc();
+    console.log("Your transaction signature", tx2);
 
     const userAccount = await program.account.userAcc.fetch(userAccountPDA);
     
     console.log("Authority");
     console.log(userAccount.authority.toString());
-    console.log("Borrowed Tokens");
-       userAccount.borrowedTokens.forEach(value => {
-      console.log(`Token: ${value.token}, Amount: ${value.amount}`);
-    });
     console.log("Lended Tokens");
     userAccount.lendedTokens.forEach(value => {
+      console.log(`Token: ${value.token}, Amount: ${value.amount}`);
+    });
+    console.log("Borrowed Tokens");
+       userAccount.borrowedTokens.forEach(value => {
       console.log(`Token: ${value.token}, Amount: ${value.amount}`);
     });
   });
 
   it("Borrow", async () =>
   {
-    const tx = await program.methods.borrowMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(10)}).rpc();
-    console.log("Your transaction signature", tx);
+    const tx1 = await program.methods.borrowMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(5)}).rpc();
+    console.log("Your transaction signature", tx1);
+    const tx2 = await program.methods.borrowMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(2)}).rpc();
+    console.log("Your transaction signature", tx2);
 
     const userAccount = await program.account.userAcc.fetch(userAccountPDA);
     
     console.log("Authority");
     console.log(userAccount.authority.toString());
-    console.log("Borrowed Tokens");
-       userAccount.borrowedTokens.forEach(value => {
-      console.log(`Token: ${value.token}, Amount: ${value.amount}`);
-    });
     console.log("Lended Tokens");
     userAccount.lendedTokens.forEach(value => {
+      console.log(`Token: ${value.token}, Amount: ${value.amount}`);
+    });
+    console.log("Borrowed Tokens");
+       userAccount.borrowedTokens.forEach(value => {
       console.log(`Token: ${value.token}, Amount: ${value.amount}`);
     });
   });

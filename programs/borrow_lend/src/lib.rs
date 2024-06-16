@@ -1,3 +1,4 @@
+mod error;
 mod constants;
 pub mod state;
 pub use state::*;
