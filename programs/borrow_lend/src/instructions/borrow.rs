@@ -19,7 +19,7 @@ pub fn borrow(ctx: Context<Borrow>, borrow: BorrowedToken) -> Result<()>
     let mut total_borrow_amount_in_usd = 0;
     for n in &user.borrowed_tokens
     {
-        total_lended_amount_in_usd += n.amount * TOKEN_PRICE; //Get the real token price from Pyth
+        total_borrow_amount_in_usd += n.amount * TOKEN_PRICE; //Get the real token price from Pyth
     }
 
     total_borrow_amount_in_usd += borrow.amount * TOKEN_PRICE; //Add current borrow amount
