@@ -27,9 +27,9 @@ describe("borrow_lend", () =>
 
   it("Lend", async () =>
   {
-    const tx1 = await program.methods.lendMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(10)}).rpc();
+    const tx1 = await program.methods.lendMain({token: new anchor.web3.PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"), amount: new anchor.BN(2)}).rpc();
     console.log("Your transaction signature", tx1);
-    const tx2 = await program.methods.lendMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(5)}).rpc();
+    const tx2 = await program.methods.lendMain({token: new anchor.web3.PublicKey("So11111111111111111111111111111111111111112"), amount: new anchor.BN(2)}).rpc();
     console.log("Your transaction signature", tx2);
 
     const userAccount = await program.account.userAcc.fetch(userAccountPDA);
@@ -48,9 +48,9 @@ describe("borrow_lend", () =>
 
   it("Borrow", async () =>
   {
-    const tx1 = await program.methods.borrowMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(5)}).rpc();
+    const tx1 = await program.methods.borrowMain({token: new anchor.web3.PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"), amount: new anchor.BN(1)}).rpc();
     console.log("Your transaction signature", tx1);
-    const tx2 = await program.methods.borrowMain({token: anchor.web3.PublicKey.default, amount: new anchor.BN(2)}).rpc();
+    const tx2 = await program.methods.borrowMain({token: new anchor.web3.PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"), amount: new anchor.BN(1)}).rpc();
     console.log("Your transaction signature", tx2);
 
     const userAccount = await program.account.userAcc.fetch(userAccountPDA);
